@@ -553,6 +553,7 @@ def calc():
                         calc_wep=wep_num+calc_now
                     except UnboundLocalError:
                         tk.messagebox.showwarning(title="警告",message="请先选择武器名字")
+                        return
                     else:
                         pass
                     damage=0
