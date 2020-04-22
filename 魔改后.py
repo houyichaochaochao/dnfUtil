@@ -270,8 +270,8 @@ def calc():
 
     global count_num, count_all, show_number,all_list_num, max_setopt
     count_num=0;count_all=0;show_number=0
-    
-    
+
+
     if jobup_select.get()[-4:] == "(奶系)":
         active_eff_one=15
         active_eff_set=18-3
@@ -576,7 +576,7 @@ def calc():
                         # 6모 7공 8스탯 9속강 10지속 11스증 12특수
                         # 13공속 14크확 / 15 특수액티브 / 16~19 패시브 /20 쿨감보정/21 2각캐특수액티브 /22~27 액티브레벨링
                     except UnboundLocalError:
-                        pass
+                        pass #  这里是不是也是return好一些
 
                     if set_oncount('1201')==1 and onecount('32200')==1:
                         base_array[3]=base_array[3]-5
@@ -675,7 +675,11 @@ def calc():
                 showsta(text='已终止')
                 return
             base_array=np.array([base_stat_h,base_stat_s,0,0,0,0,0,0,base_b,base_c,0,base_pas0,base_pas0_1,0,0,0,0,0,0,0,0])
-            calc_wep=wep_num+calc_now
+            try:
+                calc_wep=wep_num+calc_now
+            except UnboundLocalError:
+                tk.messagebox.showwarning("警告","必须先选择武器")
+                return
             god=0
             for o in calc_now:
                 god=god+int(o[-1])
@@ -714,7 +718,11 @@ def calc():
                     oneonelist=[]
                     for i in range(oneone):
                         no_cut=np.array(setget(for_calc[i]))             ## 2 3 4 5 7
-                        base_array=base_array+no_cut
+                        try:
+                            base_array=base_array+no_cut  # 提醒需要换奶装
+                        except:
+                            tk.messagebox.showwarning(title="警告",message="必须先选择奶爸武器")
+                            return
                         b_stat=(b_stat/100+1)*(no_cut[2]/100+1)*100-100
                         b_phy=(b_phy/100+1)*(no_cut[3]/100+1)*100-100
                         b_mag=(b_mag/100+1)*(no_cut[4]/100+1)*100-100
@@ -843,7 +851,7 @@ def show_result(rank_list,job_type,ele_skill):
     global image_list
     global res_img11,res_img12,res_img13,res_img14,res_img15,res_img21,res_img22,res_img23,res_img31,res_img32,res_img33,wep_select,jobup_select
 
-    if job_type=='deal': ###########################
+    if job_type=='deal': #########这个deal啥意思还是没明白
 
         global result_image_on,rank_dam,rank_stat,rank_stat2,req_cool,res_dam,res_stat,res_stat2
         rank_dam=[0,0,0,0,0]
@@ -957,7 +965,7 @@ def show_result(rank_list,job_type,ele_skill):
                 c=1
         length=len(rank_list)
 
-    elif job_type=='buf': ##########################
+    elif job_type=='buf': ########################## 这个是算的奶装
         load_presetr=load_workbook("preset.xlsx", data_only=True)
         r_preset=load_presetr["custom"]
         global result_image_on1,result_image_on2,result_image_on3,rank_buf1,rank_buf2,rank_buf3, rank_type_buf, res_buf, res_img_list, res_buf_list, res_buf_ex1, res_buf_ex2, res_buf_ex3, rank_buf_ex1, rank_buf_ex2, rank_buf_ex3, res_buf_type_what
