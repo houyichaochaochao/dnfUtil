@@ -262,12 +262,11 @@ def calc():
     db_preset=load_presetc["custom"]
     try:
         ele_skill=int(opt_job_ele[jobup_select.get()][1])  # 这里是选择职业
+        ele_in = (int(db_preset["B14"].value) + int(db_preset["B15"].value) + int(db_preset["B16"].value) +
+                  int(ele_skill) - int(db_preset["B18"].value) + int(db_preset["B19"].value) + 13)
     except KeyError:
         tkinter.messagebox.showwarning(title='警告', message='请先选择职业')
-#
 
-    ele_in=(int(db_preset["B14"].value)+int(db_preset["B15"].value)+int(db_preset["B16"].value)+
-            int(ele_skill)-int(db_preset["B18"].value)+int(db_preset["B19"].value)+13)
 
     global count_num, count_all, show_number,all_list_num, max_setopt
     count_num=0;count_all=0;show_number=0
