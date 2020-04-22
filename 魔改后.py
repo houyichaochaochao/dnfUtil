@@ -322,16 +322,16 @@ def calc():
         cool_on=0
     else:
         cool_on=1
-    list11=[];list12=[];list13=[];list14=[];list15=[] # 这里对应上衣 下装 头肩 腰带 鞋子
+    list11=[];list12=[];list13=[];list14=[];list15=[] # 这里对应上衣 下装 头肩 腰带 鞋子 这里存储的是装备的代号
     list21=[];list22=[];list23=[];list31=[];list32=[];list33=[] # 这里分别对应 手镯 项链  戒指  辅助装备 魔法石  耳环
     list_setnum=[];list_godnum=[]
     for i in range(1010,1999):
         try:
-            if eval('select_item["tg1{}"]'.format(i)) == 1:
-                list11.append('1'+str(i))
-                list_setnum.append(str(i)[1:])
+            if eval('select_item["tg1{}"]'.format(i)) == 1: #  =1 代表被选中
+                list11.append('1'+str(i)) # 对应的是选中上装的所有代码
+                list_setnum.append(str(i)[1:]) # 这里不要第一个数？？？是为啥来着？？
         except KeyError as error:
-            c=1
+            c=1 # 这个c都没用到，也不用判定啥了
     for i in range(2010,2999):
         try:
             if eval('select_item["tg1{}"]'.format(i)) == 1:
@@ -493,7 +493,7 @@ def calc():
         return
 
     try:
-        all_list=list(itertools.product(*items))
+        all_list=list(itertools.product(*items)) # 这里转换成可遍历对象
         showsta(text='开始计算')
     except MemoryError as error:
         tkinter.messagebox.showerror('内存误差',"已超过可用内存.")
@@ -511,15 +511,16 @@ def calc():
         save_list={}
         max_setopt=0
         show_number=1
-        for calc_now in all_list:
+        for calc_now in all_list: # calc_now 是装备的代号 calc_now = list11 统计上衣中有几个神话
             if exit_calc==1:
                 showsta(text='已终止')
                 return
-            god=0
-            for o in calc_now:
-                god=god+int(o[-1])
-            if god < 2:
-                set_list=["1"+str(calc_now[x][2:4]) for x in range(0,11)] 
+            god=0 # god的作用未知
+            for o in calc_now: # 我草，god就是神的意思
+                god=god+int(o[-1]) # -1 就是倒数第一个 这个是判断有没有神话？？？
+            if god < 2: # 这就是默认只有一个神话？？？ 或者没有
+                # 注意calc_now 是一个字符串列表 所以可以截片
+                set_list=["1"+str(calc_now[x][2:4]) for x in range(0,11)]  # 这里是详细计算装备的属性值,装备有6位数最后一个是字母，我只要中间2位,因为最后一个数字也没用
                 set_val=Counter(set_list)
                 del set_val['136','137','138']
                 setopt_num=sum([floor(x*0.7) for x in set_val.values()])+god
@@ -631,13 +632,13 @@ def calc():
         show_number=0
         showsta(text='结果统计中')
         
-        ranking=[]
-        for j in range(0,5):
+        ranking=[] # ranking 是单列表？？？ ,后面可以看出，是元组列表,但是元祖里面还有字典，而且字典里面的value是
+        for j in range(0,5): # 只要前五个
             try:
                 for i in save_list.keys():
                     if max(list(save_list.keys()))==i:
-                        ranking.append((i,save_list.get(i)))
-                        del save_list[i]
+                        ranking.append((i,save_list.get(i))) # savelist 是一个字典,字典的value也是一个列表
+                        del save_list[i] # 这里为啥要删除没怎么看懂
                         showsta(text='结果统计中'+str(j)+" / 5")
             except RuntimeError as error:
                 passss=1
@@ -851,7 +852,7 @@ def show_result(rank_list,job_type,ele_skill):
     global image_list
     global res_img11,res_img12,res_img13,res_img14,res_img15,res_img21,res_img22,res_img23,res_img31,res_img32,res_img33,wep_select,jobup_select
 
-    if job_type=='deal': #########这个deal啥意思还是没明白
+    if job_type=='deal': ######### deal 代表正常装备
 
         global result_image_on,rank_dam,rank_stat,rank_stat2,req_cool,res_dam,res_stat,res_stat2
         rank_dam=[0,0,0,0,0]
@@ -861,15 +862,15 @@ def show_result(rank_list,job_type,ele_skill):
         try:
             rank_dam[0]=str(int(100*rank_list[0][0]))+"%"
             rank_setting[0]=rank_list[0][1][0] ##0号是排名
-            rss[0]=rank_list[0][1][1]
+            rss[0]=rank_list[0][1][1] # 这个也直接是结果了
             for i in [11,12,13,14,15,21,22,23,31,32,33]:
                 for j in rank_setting[0]:
                     if len(j) != 6:
                         if j[0:2] == str(i):
-                            result_image_on[0][str(i)]=image_list[j]
-            rank_dam[1]=str(int(100*rank_list[1][0]))+"%"
+                            result_image_on[0][str(i)]=image_list[j] # 这里是被选中的内容,装备点了之后是亮的
+            rank_dam[1]=str(int(100*rank_list[1][0]))+"%" # 这个是估算的百分比值，只要前五个
             rank_setting[1]=rank_list[1][1][0] 
-            rss[1]=rank_list[1][1][1]
+            rss[1]=rank_list[1][1][1] # 这里返回的是结果
             for i in [11,12,13,14,15,21,22,23,31,32,33]:
                 for j in rank_setting[1]:
                     if len(j) != 6:
@@ -909,7 +910,7 @@ def show_result(rank_list,job_type,ele_skill):
         rank_stat2=[0,0,0,0,0]
         for i in range(0,5):
             try:
-                rank_stat[i]=("增伤= "+str(int(rss[i][2]))+
+                rank_stat[i]=("增伤= "+str(int(rss[i][2]))+ # 这里是对的，rss里面也是一个列表,存储的分别是这些值，在前面算好的
                               "%\n爆伤= "+str(int(rss[i][3]))+
                               "%\n白字= "+str(int(rss[i][4]))+
                               "%\n所攻= "+str(int(rss[i][6]))+
@@ -1100,7 +1101,7 @@ def show_result(rank_list,job_type,ele_skill):
         except IndexError as error:
             c=1
             
-        canvas_res.create_text(122,193,text="커스텀 祝福+"+str(int(r_preset['H2'].value)+int(r_preset['H4'].value)+int(r_preset['H5'].value))+"렙 / "+"커스텀 一觉+"+str(int(r_preset['H3'].value))+"렙\n祝福스탯+"+str(int(r_preset['H6'].value))+" / 一觉 스탯+"+str(int(r_preset['H1'].value)),font=guide_font,fill='white')
+        canvas_res.create_text(122,193,text="自订 祝福+"+str(int(r_preset['H2'].value)+int(r_preset['H4'].value)+int(r_preset['H5'].value))+"级 / "+"自定义 一觉+"+str(int(r_preset['H3'].value))+"级\n祝福等级统计+"+str(int(r_preset['H6'].value))+" / 一觉 统计+"+str(int(r_preset['H1'].value)),font=guide_font,fill='white')
 
         res_buf=canvas_res.create_text(122,125,text=rank_buf3[0],font=mid_font,fill='white')
         res_buf_type_what=canvas_res.create_text(122,145,text="总体 标准",font=guide_font,fill='white')
@@ -1161,6 +1162,7 @@ def show_result(rank_list,job_type,ele_skill):
     res_bt3=tkinter.Button(result_window,command=lambda:change_rank(2,job_type),image=show_detail_img,bg=dark_blue,borderwidth=0,activebackground=dark_blue)
     res_bt4=tkinter.Button(result_window,command=lambda:change_rank(3,job_type),image=show_detail_img,bg=dark_blue,borderwidth=0,activebackground=dark_blue)
     res_bt5=tkinter.Button(result_window,command=lambda:change_rank(4,job_type),image=show_detail_img,bg=dark_blue,borderwidth=0,activebackground=dark_blue)
+    # 位置
     if length>1:
         res_bt2.place(x=486,y=20+78*1)
     if length>2:
@@ -1170,7 +1172,7 @@ def show_result(rank_list,job_type,ele_skill):
     if length>4:
         res_bt5.place(x=486,y=20+78*4)
 
-    canvas_res.image=result_bg
+    canvas_res.image=result_bg  # 这里是为了必定显示一个？？
     res_bt1.image=show_detail_img
 
 def change_rank(now,job_type):
