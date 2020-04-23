@@ -35,7 +35,6 @@ dark_main=_from_rgb((32, 34, 37))
 dark_sub=_from_rgb((46, 49, 52))
 dark_blue=_from_rgb((29, 30, 36))
 
-    
 apikey = "TQS79U4MT11jswCLHq7G260XzXU0JhGC" ##보안코드
 
 exit_calc=0
@@ -502,7 +501,7 @@ def calc():
     global exit_calc
     if jobup_select.get()[4:7] != "奶爸" and jobup_select.get()[4:7] != "奶妈" and jobup_select.get()[4:7] != "奶萝":
     
-        # 代码名称
+        # 代码名称 这是是属性
         # 0调节器 1추공  2증 3크 4추 5속추
         # 6모 7공 8스탯 9속강 10지속 11스증 12특수
         # 13공속 14크확 / 15 액티브 / 16~19 패시브 /20 신화여부/21세트코드/22쿨감보정/23 원쿨감
@@ -522,20 +521,20 @@ def calc():
                 # 注意calc_now 是一个字符串列表 所以可以截片
                 set_list=["1"+str(calc_now[x][2:4]) for x in range(0,11)]  # 这里是详细计算装备的属性值,装备有6位数最后一个是字母，我只要中间2位,因为最后一个数字也没用
                 set_val=Counter(set_list)
-                del set_val['136','137','138']
-                setopt_num=sum([floor(x*0.7) for x in set_val.values()])+god
-                if setopt_num >= max_setopt-set_perfect :
+                del set_val['136','137','138'] # 这个也不懂
+                setopt_num=sum([floor(x*0.7) for x in set_val.values()])+god # 这里是计算可选择的数量
+                if setopt_num >= max_setopt-set_perfect: # 这里是配置速度
                     set_on=[];setapp=set_on.append
                     setcount=set_list.count
                     set_oncount=set_on.count
                     onecount=calc_now.count
                     for i in range(101,136):
                         if setcount(str(i))==2:
-                            setapp(str(i)+"1")
+                            setapp(str(i)+"1") # app=append
                         if 4>=setcount(str(i))>=3:
                             setapp(str(i)+"2")
                         if setcount(str(i))==5:
-                            setapp(str(i)+"3")
+                            setapp(str(i)+"3") # setapp 是 append
                     for i in range(136,139):
                         if setcount(str(i))==2:
                             setapp(str(i)+"0")
@@ -566,7 +565,7 @@ def calc():
                         oneone = len(for_calc)
                         oneonelist = []
                         for i in range(oneone):
-                            no_cut = getone(for_calc[i])  ## 11번 스증
+                            no_cut = getone(for_calc[i])  ## 11 烧伤 getone 相当于get
                             cut = np.array(no_cut[0:20] + no_cut[22:23] + no_cut[34:35] + no_cut[38:44])
                             skiper = (skiper / 100 + 1) * (cut[11] / 100 + 1) * 100 - 100
                             oneonelist.append(cut)
@@ -3016,12 +3015,13 @@ select_item['tg33351']=0;select_33351=tkinter.Button(self,relief='flat',borderwi
 select_33351.place(x=584,y=660)
 
 
-def donate():
+def donate(): # 这里是给原作者捐赠，韩械本应该给这里汉化的
     webbrowser.open('https://twip.kr/dawnclass16')
 donate_image=PhotoImage(file='ext_img/donate.png')
 donate_bt=tkinter.Button(self,image=donate_image, command=donate,borderwidth=0,bg=dark_main,activebackground=dark_main)
 donate_bt.place(x=625,y=550-28)
-def dunfaoff():
+
+def dunfaoff(): # 这里是韩械自己的推广
     webbrowser.open('https://space.bilibili.com/4952736')
 dunfaoff_image=PhotoImage(file='ext_img/dunfaoff.png')
 dunfaoff_url=tkinter.Button(self,image=dunfaoff_image, command=dunfaoff,borderwidth=0,bg=dark_main,activebackground=dark_main)
@@ -3034,7 +3034,7 @@ blog_url=tkinter.Button(self,image=blog_image, command=blog,borderwidth=0,bg=dar
 blog_url.place(x=615,y=410)
     
 def hamjung():
-    tkinter.messagebox.showinfo("제작자 크레딧","총제작자=Dawnclass(새벽반)\n이미지/그래픽=경철부동산\n직업/버퍼DB=대략볼록할철\n서버제공=던파오프\n기타조언=히든 도비 4,5,6호\n\n오류 제보는 블로그 덧글이나 던조 쪽지로")
+    tkinter.messagebox.showinfo("创作者信誉","总生产者=Dawnclass(새벽반(中文译名：黎明))\n图像图形=房地产\n作业/缓冲区DB=大致凸\n提供的服务器=邓波夫\n其他建议=隐藏的娃娃 4,5,6号\n\n如果有错误请到博客评论")
 maker_image=PhotoImage(file='ext_img/maker.png')
 maker=tkinter.Button(self,image=maker_image, command=hamjung,borderwidth=0,bg=dark_main,activebackground=dark_main)
 version=tkinter.Label(self,text='V '+str(now_version)+'\n'+ver_time,font=guide_font,fg="white",bg=dark_main)
@@ -3043,19 +3043,34 @@ maker.place(x=625,y=590)
 version.place(x=630,y=650)
 
 try:
-    html_version=requests.get('https://dunfaoff.com/DawnClass.df')
+    html_version=requests.get('https://dunfaoff.com/DawnClass.df') # 这里是博客作者个人发布的api接口,我可以换成我自己的
     soup_version = BeautifulSoup(html_version.content, 'html.parser')
     now_version_num=int(now_version[0]+now_version[2]+now_version[4])
     net_version=str(soup_version)[2:]
     net_version_num=int(net_version[0]+net_version[2]+net_version[4])
-    if now_version_num < now_version_num:
-        ask_update=tkinter.messagebox.askquestion('업데이트',"最新版本이 존재합니다. 이동하시겠습니까?")
+    if now_version_num != net_version_num:
+        ask_update=tkinter.messagebox.askquestion('更新版本',"最新版本已经发布，你想使用最新版本吗?")
         if ask_update == 'yes':
             webbrowser.open('https://drive.google.com/open?id=1p8ZdzW_NzGKHHOtfPTuZSr1YgSEVtYCj')
     else:
         print("最新版本")
 except:
-    print("更新检查失败（网络错误）")
+    # print("更新检查失败（网络错误）")
+    pass # 这块先不用了
+
+# html_version=requests.get('https://dunfaoff.com/DawnClass.df')
+# soup_version = BeautifulSoup(html_version.content, 'html.parser')
+# now_version_num=int(now_version[0]+now_version[2]+now_version[4])
+# net_version=str(soup_version)[2:]
+# net_version_num=int(net_version[0]+net_version[2]+net_version[4])
+# if now_version_num != net_version_num:
+#     ask_update=tkinter.messagebox.askquestion('更新版本',"最新版本已经发布，你想使用最新版本吗?")
+#     if ask_update == 'yes':
+#         webbrowser.open('https://drive.google.com/open?id=1p8ZdzW_NzGKHHOtfPTuZSr1YgSEVtYCj')
+# else:
+#     print("最新版本")
+# 这个可以直接运行
+# webbrowser.open('https://drive.google.com/open?id=1p8ZdzW_NzGKHHOtfPTuZSr1YgSEVtYCj')
 
 if __name__ == "__main__":
     update_thread()
